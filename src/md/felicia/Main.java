@@ -6,14 +6,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Main {
+
+    private static final String FILE_NAME = "D:\\Catalog\\";
 
     public static void main(String[] args) {
         String catalog = "";
@@ -54,6 +59,22 @@ public class Main {
         System.out.println(date);
 
 
+        downloadCatalog(catalog,decoded);
 
+
+
+    }
+
+    public  static  void downloadCatalog(String url, String file){
+        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+             FileOutputStream fileOutputStream  = new FileOutputStream(FILE_NAME + file + ".xls")) {
+            byte dataBuffer[] = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
     }
 }
