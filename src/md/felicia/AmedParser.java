@@ -14,13 +14,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
@@ -30,7 +26,7 @@ public class AmedParser {
 
     public static void main(String[] args) {
         String catalog = "";
-        String decoded;
+        String decoded = "";
         Elements cataloglinks = null;
         Document doc;
         try {
@@ -46,7 +42,11 @@ public class AmedParser {
             catalog = link.getElementsByTag("a").attr("href");
         }
 
-        decoded = URLDecoder.decode(catalog, StandardCharsets.UTF_8);
+        try {
+            decoded = URLDecoder.decode(catalog, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         decoded = decoded.substring(decoded.lastIndexOf(" "));
         decoded = decoded.substring(0, decoded.lastIndexOf("."));
