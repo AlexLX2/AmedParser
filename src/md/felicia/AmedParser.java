@@ -14,14 +14,17 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
-public class Main {
+public class AmedParser {
 
     private static final String FILE_NAME = "D:\\Catalog\\";
 
@@ -31,7 +34,7 @@ public class Main {
         Elements cataloglinks = null;
         Document doc;
         try {
-            doc = Jsoup.connect("http://amed.md/ro/catalogul-national").get();
+            doc = Jsoup.connect("https://amdm.gov.md/ro/catalogul-national").get();
 
             cataloglinks = doc.body().getElementsByClass("field-item even");
         } catch (IOException e) {
@@ -59,8 +62,6 @@ public class Main {
     }
 
     private static void downloadCatalog(String url, String fileStringPath) {
-
-
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(fileStringPath)) {
             byte[] dataBuffer = new byte[1024];
@@ -71,8 +72,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private static void sendMail(String file) {
