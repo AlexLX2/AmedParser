@@ -14,9 +14,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
@@ -26,7 +30,7 @@ public class AmedParser {
 
     public static void main(String[] args) {
         String catalog = "";
-        String decoded = "";
+        String decoded;
         Elements cataloglinks = null;
         Document doc;
         try {
@@ -42,11 +46,7 @@ public class AmedParser {
             catalog = link.getElementsByTag("a").attr("href");
         }
 
-        try {
-            decoded = URLDecoder.decode(catalog, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        decoded = URLDecoder.decode(catalog, StandardCharsets.UTF_8);
 
         decoded = decoded.substring(decoded.lastIndexOf(" "));
         decoded = decoded.substring(0, decoded.lastIndexOf("."));
@@ -76,8 +76,8 @@ public class AmedParser {
 
     private static void sendMail(String file) {
         String to = "ak@felicia.md";         // sender email
-        String from = "ak@felicia.md";       // receiver email
-        String host = "10.50.0.21";            // mail server host
+        String from = "delivery@felicia.md";       // receiver email
+        String host = "mail.felicia.md";     // mail server host
 
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
