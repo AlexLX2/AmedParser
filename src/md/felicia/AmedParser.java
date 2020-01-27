@@ -26,15 +26,26 @@ import java.util.Properties;
 
 public class AmedParser {
 
-    private static final String FILE_NAME = "D:\\Catalog\\";
+    private static String FILE_NAME;
+    private static String CATALOG_URI;
 
     public static void main(String[] args) {
         String catalog = "";
         String decoded;
         Elements cataloglinks = null;
         Document doc;
+        Properties properties = new Properties();
         try {
-            doc = Jsoup.connect("http://amdm.gov.md/ro/catalogul-national").get();
+            properties.load(AmedParser.class.getResourceAsStream("config.ini"));
+            CATALOG_URI = properties.getProperty("CATALOG_URI");
+            FILE_NAME = properties.getProperty("LOCAL_CATALOG_PATH");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            doc = Jsoup.connect(CATALOG_URI).get();
 
             cataloglinks = doc.body().getElementsByClass("field-item even");
         } catch (IOException e) {
@@ -53,13 +64,13 @@ public class AmedParser {
 
         String fileStringPath = FILE_NAME + decoded + ".xls";
         File checkFile = new File(fileStringPath);
-        CatalogParser.parse(fileStringPath);
         if (!checkFile.exists()) {
             downloadCatalog(catalog, fileStringPath);
             sendMail(fileStringPath);
-        } else
+        } else {
+            CatalogParser.parse(fileStringPath);
             System.out.println("Catalog already downloaded");
-
+        }
     }
 
     private static void downloadCatalog(String url, String fileStringPath) {

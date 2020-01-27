@@ -9,6 +9,91 @@ public class CatalogItem {
     private String volum;
     private String divizarea;
     private String country;
+
+    public String getCodulMedicamentului() {
+        return codulMedicamentului;
+    }
+
+    public int getCodulVamal() {
+        return codulVamal;
+    }
+
+    public String getDenumireaComerciala() {
+        return denumireaComerciala;
+    }
+
+    public String getFormaFarmaceutica() {
+        return formaFarmaceutica;
+    }
+
+    public String getDoza() {
+        return doza;
+    }
+
+    public String getVolum() {
+        return volum;
+    }
+
+    public String getDivizarea() {
+        return divizarea;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getDetinatorul() {
+        return detinatorul;
+    }
+
+    public int getNumarDeInregistrare() {
+        return numarDeInregistrare;
+    }
+
+    public String getRegisterDate() {
+        return registerDate;
+    }
+
+    public String getCodATC() {
+        return codATC;
+    }
+
+    public String getDenumireaInternationala() {
+        return denumireaInternationala;
+    }
+
+    public int getTermenDeValabilitate() {
+        return termenDeValabilitate;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public double getPriceMDL() {
+        return priceMDL;
+    }
+
+    public double getPriceVal() {
+        return priceVal;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getDataAprobarii() {
+        return dataAprobarii;
+    }
+
+    public String getModificari() {
+        return modificari;
+    }
+
+    public String getModificari2() {
+        return modificari2;
+    }
+
     private String detinatorul;
     private int numarDeInregistrare;
     private String registerDate;
@@ -72,6 +157,10 @@ public class CatalogItem {
                 ", modificari='" + modificari + '\'' +
                 ", modificari2='" + modificari2 + '\'' +
                 '}';
+    }
+
+    public void insertItem() {
+        PostgreSQL.getInstance().insertPrice(this);
     }
 }
 

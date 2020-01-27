@@ -28,6 +28,7 @@ public class CatalogParser {
         for (Row row : sheet) {
             if (row.getLastCellNum() == 21 && row.getRowNum() > 0) {
                 CatalogItem catalogItem = createItem(row);
+                catalogItem.insertItem();
                 System.out.println(catalogItem);
             } else {
                 System.out.println("Wrong file format!");
@@ -79,12 +80,9 @@ public class CatalogParser {
         String codATC = row.getCell(11).getStringCellValue();
         String denumireaInternationala = row.getCell(12).getStringCellValue();
         int termenDeValabilitate = (int) row.getCell(13).getNumericCellValue();
-        ;
         String barcode = row.getCell(14).getStringCellValue();
         double priceMDL = row.getCell(15).getNumericCellValue();
-        ;
         double priceVal = row.getCell(16).getNumericCellValue();
-        ;
         String currency = row.getCell(17).getStringCellValue();
         String dataAprobarii = row.getCell(18).getStringCellValue();
         String modificari = row.getCell(19).getStringCellValue();
