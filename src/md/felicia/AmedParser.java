@@ -34,7 +34,7 @@ public class AmedParser {
         Elements cataloglinks = null;
         Document doc;
         try {
-            doc = Jsoup.connect("https://amdm.gov.md/ro/catalogul-national").get();
+            doc = Jsoup.connect("http://amdm.gov.md/ro/catalogul-national").get();
 
             cataloglinks = doc.body().getElementsByClass("field-item even");
         } catch (IOException e) {
@@ -53,6 +53,7 @@ public class AmedParser {
 
         String fileStringPath = FILE_NAME + decoded + ".xls";
         File checkFile = new File(fileStringPath);
+        CatalogParser.parse(fileStringPath);
         if (!checkFile.exists()) {
             downloadCatalog(catalog, fileStringPath);
             sendMail(fileStringPath);
@@ -111,4 +112,5 @@ public class AmedParser {
         }
 
     }
+
 }
