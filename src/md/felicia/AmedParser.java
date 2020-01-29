@@ -66,7 +66,10 @@ public class AmedParser {
         File checkFile = new File(fileStringPath);
         if (!checkFile.exists()) {
             downloadCatalog(catalog, fileStringPath);
-            sendMail(fileStringPath);
+            String to = properties.getProperty("MAIL_TO");
+            String from = properties.getProperty("MAIL_FROM");
+            String host = properties.getProperty("MAIL_SERVER");
+            sendMail(fileStringPath, to, from, host);
         } else {
             CatalogParser.parse(fileStringPath);
             System.out.println("Catalog already downloaded");
@@ -86,10 +89,7 @@ public class AmedParser {
         }
     }
 
-    private static void sendMail(String file) {
-        String to = "ak@felicia.md";         // sender email
-        String from = "delivery@felicia.md";       // receiver email
-        String host = "mail.felicia.md";     // mail server host
+    private static void sendMail(String fileStringPath, String to, String from, String host) {
 
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
@@ -109,7 +109,7 @@ public class AmedParser {
             message.setText("Вышел новый каталог");
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.attachFile(file);
+            mimeBodyPart.attachFile(fileStringPath);
 
             MimeMultipart multipart = new MimeMultipart("related");
             multipart.addBodyPart(mimeBodyPart);
