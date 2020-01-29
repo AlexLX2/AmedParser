@@ -51,40 +51,15 @@ public class PostgreSQL {
         return instance;
     }
 
-
-//    public void insertLogItem(LogItem logItem) {
-//        String cmd = "INSERT INTO public.log_items (" +
-//                "log_source, log_date,  log_action, log_address, log_user)" +
-//                " VALUES (?,?,?,?,?)";
-//
-//
-//        PreparedStatement preparedStatement = null;
-//        try {
-//            preparedStatement = connection.prepareStatement(cmd);
-//            preparedStatement.setInt(1, logItem.getSource());
-//            preparedStatement.setTimestamp(2, new java.sql.Timestamp(logItem.getTimeStamp().getTime()));
-//            preparedStatement.setString(3, logItem.getAction());
-//            preparedStatement.setString(4, logItem.getIpAdress());
-//            preparedStatement.setString(5, logItem.getUser());
-//
-//            int rows = preparedStatement.executeUpdate();
-//            System.out.println(rows);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
-
     public void insertPrice(CatalogItem catalogItem) {
-        System.out.println("Inserted");
 
-        String cmd = "INSERT INTO public.\"Prices\"(\n" +
-                "codulMedicamentului\", \"denumireaComerciala\", \"formaFarmaceutica\", doza, volum, divizarea," +
-                "country, detinatorul, \"numarDeInregistrare\", \"registerDate\", \"codATC\", \"denumireaInternationala\", \"termenDeValabilitate\", barcode, \"priceMDL\", \"priceVal\", currency, \"dataAprobarii\", modificari, modificari2, )" +
-                "\tVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String cmd = "INSERT INTO public.\"Prices\" (" +
+                "\"codulMedicamentului\", \"denumireaComerciala\", \"formaFarmaceutica\", doza, volum, divizarea," +
+                "country, detinatorul, \"numarDeInregistrare\", \"registerDate\", \"codATC\", \"denumireaInternationala\", \"termenDeValabilitate\", barcode, \"priceMDL\", " +
+                "\"priceVal\", currency, \"dataAprobarii\", modificari, modificari2, \"codulVamal\" )" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(cmd);
             preparedStatement.setString(1, catalogItem.getCodulMedicamentului());
@@ -96,30 +71,31 @@ public class PostgreSQL {
             preparedStatement.setString(7, catalogItem.getCountry());
             preparedStatement.setString(8, catalogItem.getDetinatorul());
             preparedStatement.setInt(9, catalogItem.getNumarDeInregistrare());
-            preparedStatement.setString(10, catalogItem.getRegisterDate());
+            preparedStatement.setDate(10, catalogItem.getRegisterDate());
             preparedStatement.setString(11, catalogItem.getCodATC());
             preparedStatement.setString(12, catalogItem.getDenumireaInternationala());
             preparedStatement.setInt(13, catalogItem.getTermenDeValabilitate());
-            preparedStatement.setString(14, catalogItem.getBarcode());
+            preparedStatement.setLong(14, catalogItem.getBarcode());
             preparedStatement.setDouble(15, catalogItem.getPriceMDL());
             preparedStatement.setDouble(16, catalogItem.getPriceVal());
             preparedStatement.setString(17, catalogItem.getCurrency());
             preparedStatement.setString(18, catalogItem.getDataAprobarii());
             preparedStatement.setString(19, catalogItem.getModificari());
             preparedStatement.setString(20, catalogItem.getModificari2());
+            preparedStatement.setInt(21, catalogItem.getCodulVamal());
 
             int rows = preparedStatement.executeUpdate();
-            System.out.println(rows);
+//            System.out.println(rows);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Inserted");
-//TODO Привести в соответствие типы в БД и в классе
+//       System.out.println("Inserted");
+
     }
 
     public void executeSQL(String sql) {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(sql);
             int rows = preparedStatement.executeUpdate();

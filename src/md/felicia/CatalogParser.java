@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class CatalogParser {
     public static String parse(String file) {
         String result = "";
-        InputStream in = null;
+        InputStream in;
         HSSFWorkbook wb = null;
 
         try {
@@ -29,7 +29,7 @@ public class CatalogParser {
             if (row.getLastCellNum() == 21 && row.getRowNum() > 0) {
                 CatalogItem catalogItem = createItem(row);
                 catalogItem.insertItem();
-                System.out.println(catalogItem);
+                //System.out.println(catalogItem);
             } else {
                 System.out.println("Wrong file format!");
             }
@@ -53,7 +53,7 @@ public class CatalogParser {
             default:
                 codulVamal = 0;
         }
-        System.out.println(row.getRowNum());
+        //   System.out.println(row.getRowNum());
         String denumireaComerciala = row.getCell(2).getStringCellValue();
         String formaFarmaceutica = row.getCell(3).getStringCellValue();
         String doza = row.getCell(4).getStringCellValue();

@@ -1,5 +1,9 @@
 package md.felicia;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class CatalogItem {
     private String codulMedicamentului;
     private int codulVamal;
@@ -50,8 +54,15 @@ public class CatalogItem {
         return numarDeInregistrare;
     }
 
-    public String getRegisterDate() {
-        return registerDate;
+    public Date getRegisterDate() {
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        Date date = null;
+        try {
+            date = new Date(df.parse(registerDate).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     public String getCodATC() {
@@ -66,8 +77,14 @@ public class CatalogItem {
         return termenDeValabilitate;
     }
 
-    public String getBarcode() {
-        return barcode;
+    public long getBarcode() {
+        long result;
+        try {
+            result = Long.parseLong(barcode);
+        } catch (NumberFormatException e) {
+            result = 0L;
+        }
+        return result;
     }
 
     public double getPriceMDL() {
