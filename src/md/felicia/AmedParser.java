@@ -28,49 +28,28 @@ public class AmedParser {
 
     private static String FILE_NAME;
     private static String CATALOG_URI;
+    private static String MAIL_TO;
+    private static String MAIL_FROM;
+    private static String MAIL_SERVER;
 
-    public static void main(String[] args) {
-        String catalog = "";
-        String decoded;
-        Elements cataloglinks = null;
-        Document doc;
+    static {
         Properties properties = new Properties();
         try {
             properties.load(AmedParser.class.getResourceAsStream("config.ini"));
             CATALOG_URI = properties.getProperty("CATALOG_URI");
             FILE_NAME = properties.getProperty("LOCAL_CATALOG_PATH");
+            MAIL_TO = properties.getProperty("MAIL_TO");
+            MAIL_FROM = properties.getProperty("MAIL_FROM");
+            MAIL_SERVER = properties.getProperty("MAIL_SERVER");
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Initialization failed! Verify the config file!");
         }
 
+    }
 
-        try {
-            doc = Jsoup.connect(CATALOG_URI).get();
-
-            cataloglinks = doc.body().getElementsByClass("field-item even");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert cataloglinks != null;
-        for (Element link : cataloglinks) {
-            catalog = link.getElementsByTag("a").attr("href");
-        }
-
-        decoded = URLDecoder.decode(catalog, StandardCharsets.UTF_8);
-
-        decoded = decoded.substring(decoded.lastIndexOf(" "));
-        decoded = decoded.substring(0, decoded.lastIndexOf("."));
-
-        String fileStringPath = FILE_NAME + decoded + ".xls";
-        File checkFile = new File(fileStringPath);
-        if (!checkFile.exists()) {
-            downloadCatalog(catalog, fileStringPath);
-            sendMail(fileStringPath);
-        } else {
-            CatalogParser.parse(fileStringPath);
-            System.out.println("Catalog already downloaded");
-        }
+    public static void main(String[] args) {
+        checkCatalog();
     }
 
     private static void downloadCatalog(String url, String fileStringPath) {
@@ -86,10 +65,7 @@ public class AmedParser {
         }
     }
 
-    private static void sendMail(String file) {
-        String to = "ak@felicia.md";         // sender email
-        String from = "delivery@felicia.md";       // receiver email
-        String host = "mail.felicia.md";     // mail server host
+    private static void sendMail(String fileStringPath, String to, String from, String host) {
 
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
@@ -109,7 +85,7 @@ public class AmedParser {
             message.setText("Вышел новый каталог");
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.attachFile(file);
+            mimeBodyPart.attachFile(fileStringPath);
 
             MimeMultipart multipart = new MimeMultipart("related");
             multipart.addBodyPart(mimeBodyPart);
@@ -124,4 +100,36 @@ public class AmedParser {
 
     }
 
+    private static void checkCatalog() {
+        String catalog = "";
+        String decoded;
+        Elements cataloglinks = null;
+        Document doc;
+
+        try {
+            doc = Jsoup.connect(CATALOG_URI).get();
+            cataloglinks = doc.body().getElementsByClass("field-item even");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert cataloglinks != null;
+        for (Element link : cataloglinks) {
+            catalog = link.getElementsByTag("a").attr("href");
+        }
+
+        decoded = URLDecoder.decode(catalog, StandardCharsets.UTF_8);
+        decoded = decoded.substring(decoded.lastIndexOf(" "));
+        decoded = decoded.substring(0, decoded.lastIndexOf("."));
+
+        String fileStringPath = FILE_NAME + decoded + ".xls";
+        File checkFile = new File(fileStringPath);
+        if (!checkFile.exists()) {
+            downloadCatalog(catalog, fileStringPath);
+            sendMail(fileStringPath, MAIL_TO, MAIL_FROM, MAIL_SERVER);
+            CatalogParser.parse(fileStringPath);
+        } else {
+            System.out.println("Catalog already downloaded");
+        }
+    }
 }
