@@ -53,10 +53,10 @@ public class PostgreSQL {
 
     public void insertPrice(CatalogItem catalogItem) {
 
-        String cmd = "INSERT INTO public.\"Prices\" (" +
-                "\"codulMedicamentului\", \"denumireaComerciala\", \"formaFarmaceutica\", doza, volum, divizarea," +
-                "country, detinatorul, \"numarDeInregistrare\", \"registerDate\", \"codATC\", \"denumireaInternationala\", \"termenDeValabilitate\", barcode, \"priceMDL\", " +
-                "\"priceVal\", currency, \"dataAprobarii\", modificari, modificari2, \"codulVamal\" )" +
+        String cmd = "INSERT INTO public.\"prices\" (" +
+                "\"codulmedicamentului\", \"denumireacomerciala\", \"formafarmaceutica\", doza, volum, divizarea," +
+                "country, detinatorul, \"numardeinregistrare\", \"registerdate\", \"codatc\", \"denumireainternationala\", \"termendevalabilitate\", barcode, \"pricemdl\", " +
+                "\"priceval\", currency, \"dataaprobarii\", modificari, modificari2, \"codulvamal\" )" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         PreparedStatement preparedStatement;
@@ -85,12 +85,12 @@ public class PostgreSQL {
             preparedStatement.setInt(21, catalogItem.getCodulVamal());
 
             int rows = preparedStatement.executeUpdate();
-//            System.out.println(rows);
+            System.out.println(rows);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-//       System.out.println("Inserted");
+        System.out.println("Inserted");
 
     }
 

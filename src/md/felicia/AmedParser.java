@@ -49,6 +49,7 @@ public class AmedParser {
     }
 
     public static void main(String[] args) {
+
         checkCatalog();
     }
 
@@ -107,6 +108,8 @@ public class AmedParser {
         Document doc;
 
         try {
+            System.setProperty("javax.net.ssl.trustStore", "/etc/medinfo/cacerts");
+            System.setProperty("javax.net.ssl.trustStorePassword", "VfvfGerf123_");
             doc = Jsoup.connect(CATALOG_URI).get();
             cataloglinks = doc.body().getElementsByClass("field-item even");
         } catch (IOException e) {
